@@ -11,6 +11,18 @@ public class Produto {
         this.preco = preco;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setPreco(Double preco) {
+        this.preco = preco;
+    }
+
     public Integer getId() {
         return id;
     }

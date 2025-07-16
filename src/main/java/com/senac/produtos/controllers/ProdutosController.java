@@ -1,14 +1,12 @@
 package com.senac.produtos.controllers;
 
 import com.senac.produtos.entities.Produto;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/produtos")
@@ -40,6 +38,39 @@ public class ProdutosController {
             }
         }
 
+        return null;
+    }
+
+    @PostMapping
+    public Produto criarProduto(@RequestBody Produto produto) {
+        produto.setId(new Random().nextInt());
+        lista.add(produto);
+        return produto;
+    }
+
+    @PutMapping("/{idProduto}")
+    public Produto alterarProduto(
+            @PathVariable Integer idProduto,
+            @RequestBody Produto produto
+    ) {
+        for (Produto alterar: lista) {
+            if (alterar.getId().equals(idProduto)) {
+                alterar.setNome(produto.getNome());
+                alterar.setPreco(produto.getPreco());
+                return alterar;
+            }
+        }
+        return null;
+    }
+
+    @DeleteMapping("/{idProduto}")
+    public Produto removerProduto(@PathVariable Integer idProduto) {
+        for (Produto remover: lista) {
+            if (remover.getId().equals(idProduto)) {
+                lista.remove(remover);
+                return remover;
+            }
+        }
         return null;
     }
 }
