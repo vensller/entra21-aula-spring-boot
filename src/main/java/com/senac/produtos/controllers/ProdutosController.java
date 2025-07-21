@@ -1,6 +1,7 @@
 package com.senac.produtos.controllers;
 
 import com.senac.produtos.entities.Produto;
+import com.senac.produtos.repositories.ProdutoRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -13,8 +14,10 @@ import java.util.Random;
 public class ProdutosController {
 
     private List<Produto> lista;
+    private final ProdutoRepository produtoRepository;
 
-    public ProdutosController() {
+    public ProdutosController(ProdutoRepository produtoRepository) {
+        this.produtoRepository = produtoRepository;
         Produto computador = new Produto(1, "Dell", 3000.0);
         Produto monitor = new Produto(2, "Monitor Acer", 700.0);
         Produto mouse = new Produto(3, "Mouse Logitech", 50.0);
@@ -27,24 +30,17 @@ public class ProdutosController {
 
     @GetMapping
     public List<Produto> listar() {
-        return lista;
+        return this.produtoRepository.findAll();
     }
 
     @GetMapping("/{idProduto}")
     public Produto buscarProduto(@PathVariable Integer idProduto) {
-        for (Produto produto: lista) {
-            if (Objects.equals(produto.getId(), idProduto)) {
-                return produto;
-            }
-        }
-
-        return null;
+        return this.produtoRepository.findById(idProduto).get();
     }
 
     @PostMapping
     public Produto criarProduto(@RequestBody Produto produto) {
-        produto.setId(new Random().nextInt());
-        lista.add(produto);
+        this.produtoRepository.save(produto);
         return produto;
     }
 
@@ -53,24 +49,22 @@ public class ProdutosController {
             @PathVariable Integer idProduto,
             @RequestBody Produto produto
     ) {
-        for (Produto alterar: lista) {
-            if (alterar.getId().equals(idProduto)) {
-                alterar.setNome(produto.getNome());
-                alterar.setPreco(produto.getPreco());
-                return alterar;
-            }
-        }
-        return null;
+        Produto alterar = this.produtoRepository.findById(idProduto).get();
+
+        alterar.setNome(produto.getNome());
+        alterar.setPreco(produto.getPreco());
+
+        this.produtoRepository.save(alterar);
+
+        return alterar;
     }
 
     @DeleteMapping("/{idProduto}")
     public Produto removerProduto(@PathVariable Integer idProduto) {
-        for (Produto remover: lista) {
-            if (remover.getId().equals(idProduto)) {
-                lista.remove(remover);
-                return remover;
-            }
-        }
-        return null;
+        Produto produto = this.produtoRepository.findById(idProduto).get();
+
+        this.produtoRepository.deleteById(idProduto);
+
+        return produto;
     }
 }

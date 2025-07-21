@@ -1,9 +1,20 @@
 package com.senac.produtos.entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Produto {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nome;
     private Double preco;
+
+    public Produto() {
+    }
 
     public Produto(Integer id, String nome, Double preco) {
         this.id = id;
