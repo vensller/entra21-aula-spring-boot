@@ -6,26 +6,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Random;
 
 @RestController
 @RequestMapping("/produtos")
 public class ProdutosController {
 
-    private List<Produto> lista;
     private final ProdutoRepository produtoRepository;
 
     public ProdutosController(ProdutoRepository produtoRepository) {
         this.produtoRepository = produtoRepository;
-        Produto computador = new Produto(1, "Dell", 3000.0);
-        Produto monitor = new Produto(2, "Monitor Acer", 700.0);
-        Produto mouse = new Produto(3, "Mouse Logitech", 50.0);
-        ArrayList<Produto> lista = new ArrayList<>();
-        lista.add(computador);
-        lista.add(monitor);
-        lista.add(mouse);
-        this.lista = lista;
     }
 
     @GetMapping
